@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -16,12 +14,12 @@ namespace TrueAutoShops.Services
     {
         private readonly HttpClient _client;
 
-
         public ShopDataService(HttpClient client)
         {
             _client = client;
-         
-         
+            var token = HttpClientConnector.GetBearerToken();
+            _client.BaseAddress = new Uri("http://asapservices.cloudapp.net:8080");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Result.AccessToken);
         }
         public async Task<List<ShopInfo>> GetListofShopsByCityName(string cityName)
         {
@@ -33,30 +31,13 @@ namespace TrueAutoShops.Services
             };
         }
 
-        public async Task<ShopInfo> GetShopsByCityId(CancellationToken cancellationToken, int zipcityid = 0)
+        public async Task<List<ShopInfo>> GetShopsByCityId(CancellationToken cancellationToken, int zipcityid = 0)
         {
-            try
-            {
-
-           
-            var token = await HttpClientConnector.GetBearerToken();
-            _client.BaseAddress = new Uri("http://asapservices.cloudapp.net:8080");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
             var response = await _client.GetAsync($"/api/v1/shops/city/{zipcityid}", cancellationToken);
-           // if (!response.IsSuccessStatusCode) { return null; }
-
+            if (!response.IsSuccessStatusCode) { return null; }
             var jsonMessage = await response.Content.ReadAsStringAsync();
-
-            var shopInfo = JsonConvert.DeserializeObject<dynamic>(jsonMessage);
-
-            return shopInfo.First();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            var shopInfo = JsonConvert.DeserializeObject<ShopInfoResponse>(jsonMessage);
+            return shopInfo.Response;
         }
-
     }
 }

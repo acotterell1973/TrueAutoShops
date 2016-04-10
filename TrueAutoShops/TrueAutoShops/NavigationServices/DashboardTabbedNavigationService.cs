@@ -94,10 +94,19 @@ namespace TrueAutoShops.NavigationServices
 
         private void SetupTabbedPage()
         {
-            _tabbedNavigations = new FreshTabbedNavigationContainer();
-            _searchPage = _tabbedNavigations.AddTab<SearchPageModel>("Search","");
-            _shopServiceHistoryPage = _tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops","");
-            this.Detail = _tabbedNavigations;
+            try
+            {
+                _tabbedNavigations = new FreshTabbedNavigationContainer();
+                _searchPage = _tabbedNavigations.AddTab<SearchPageModel>("Search", "");
+                _shopServiceHistoryPage = _tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops", "");
+                this.Detail = _tabbedNavigations;
+            }
+            catch (Exception exception)
+            {
+                
+                throw;
+            }
+        
         }
 
     }

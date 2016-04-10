@@ -4,6 +4,11 @@ using PropertyChanged;
 
 namespace TrueAutoShops.Models
 {
+    public class ShopInfoResponse
+    {
+        public List<ShopInfo> Response { get; set; }
+    
+    }
     public class ShopInfo  : BaseNotificationHandler
     {
         public ShopInfo()

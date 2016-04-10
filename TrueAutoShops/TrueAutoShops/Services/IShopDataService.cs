@@ -8,6 +8,6 @@ namespace TrueAutoShops.Services
     public interface IShopDataService
     {
         Task<List<ShopInfo>> GetListofShopsByCityName(string cityName);
-        Task<ShopInfo> GetShopsByCityId(CancellationToken cancellationToken, int zipcityid = 0);
+        Task<List<ShopInfo>> GetShopsByCityId(CancellationToken cancellationToken, int zipcityid = 0);
     }
 }
