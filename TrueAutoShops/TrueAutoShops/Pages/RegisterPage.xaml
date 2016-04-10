@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrueAutoShops.Pages.RegisterPage">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="20,20,20,20"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <StackLayout>
+      <Frame>
+        <Image Source="logo-small.png"></Image>
+      </Frame>
+      <Entry Placeholder="Email Address or User"></Entry>
+      <Entry Placeholder="password" IsPassword="True"></Entry>
+      <Entry Placeholder="Confirm password" IsPassword="True"></Entry>
+      <Button BorderRadius="0" Text="Register"></Button>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

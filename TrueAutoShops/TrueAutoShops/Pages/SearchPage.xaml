@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrueAutoShops.Pages.SearchPage"
+             Title="Search Shops">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="0,0,0,0"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+      <SearchBar Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"  Placeholder="Search"></SearchBar>
+      <ListView ItemsSource="{Binding Shops}"
+        IsGroupingEnabled="true" GroupDisplayBinding="{Binding Key}"
+        GroupShortNameBinding="{Binding Key}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextCell Text="{Binding Name}" TextColor="Black"
+              Detail="{Binding PhoneNumber}" DetailColor="Gray">
+            </TextCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

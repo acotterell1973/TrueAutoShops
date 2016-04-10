@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extensions="clr-namespace:TrueAutoShops.Extensions;assembly=TrueAutoShops"
+             x:Class="TrueAutoShops.Pages.DashboardPage"
+             Icon="Icon-Small.png"
+             >
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="5,5,5,5"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <ScrollView>
+      <StackLayout Spacing="10">
+        <StackLayout HeightRequest="40" BackgroundColor="Aqua">
+          <Label Text="Ads"></Label>
+        </StackLayout>
+        <StackLayout HeightRequest="40" BackgroundColor="#3c8dbc" Orientation="Horizontal" >
+          <Grid HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0" Orientation="Horizontal">
+              <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                <Label Text="Schedule a Service Request"></Label>
+              </StackLayout>
+              <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                <Image Source="{extensions:ImageResource TrueAutoShops.Images.CalendarRequestService.png}" />
+              </StackLayout>
+            </StackLayout>
+            <Button  Command="{Binding ScheduleServiceCommand}" BackgroundColor="Transparent" TextColor="Transparent" />
+          </Grid>
+
+        </StackLayout>
+        <StackLayout HeightRequest="40" BackgroundColor="Lime">
+          <Label Text="CAr"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Padding="5" HeightRequest="40" BackgroundColor="Gray">
+          <StackLayout BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+            <Label Text="Profile"></Label>
+          </StackLayout>
+          <StackLayout BackgroundColor="Yellow" Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+            <Label Text="Messages"></Label>
+          </StackLayout>
+        </StackLayout>
+      </StackLayout>
+    </ScrollView>
+  </ContentPage.Content>
+</ContentPage>

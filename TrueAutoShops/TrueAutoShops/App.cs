@@ -1,32 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using FreshMvvm;
+using TrueAutoShops.Helpers;
+using TrueAutoShops.NavigationServices;
+using TrueAutoShops.PageModels;
+using TrueAutoShops.Services;
+using TrueAutoShops.Styles;
 using Xamarin.Forms;
+using Constants = TrueAutoShops.Helpers.Constants;
 
 namespace TrueAutoShops
 {
     public class App : Application
     {
+
         public App()
         {
-            // The root page of your application
-            MainPage = new ContentPage
-            {
-                Content = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children = {
-                        new Label {
-                            XAlign = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms!"
-                        }
-                    }
-                }
-            };
+            RegisterDependancies();
+            RegisterRootNavigation();
         }
 
+        private void RegisterMasterDetail()
+        {
+            var masterDetailNavigationContainer = new ThemedMasterDetailNavigationContainer();
+            masterDetailNavigationContainer.Init("Menu","slideout.png");
+            masterDetailNavigationContainer.AddPageWithIcon<SearchPageModel>("Home","slideout.png");
+            FreshIOC.Container.Register<IFreshNavigationService>(masterDetailNavigationContainer);
+        }
+
+        private void RegisterRootNavigation()
+        {
+
+            Resources = new AppStyleResources().Dictionary;
+            var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>();
+
+            var logginNavigation = new FreshNavigationContainer(page, Constants.LoginNavigationService);
+            
+            var dashboardNavigation = new DashboardTabbedNavigationContainer();
+            
+            MainPage = logginNavigation;
+        }
+        private static void RegisterDependancies()
+        {
+            FreshIOC.Container.Register<IShopDataService, ShopDataService>();
+            FreshIOC.Container.Register<ISecurityDataService, SecurityDataService>();
+            FreshIOC.Container.Register(HttpClientConnector.Instance);
+        }
         protected override void OnStart()
         {
             // Handle when your app starts

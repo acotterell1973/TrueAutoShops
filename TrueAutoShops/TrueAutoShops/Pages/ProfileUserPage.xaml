@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrueAutoShops.Pages.ProfileUserPage" Title="Edit">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="20,20,20,20"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <StackLayout>
+      <Entry Text="{Binding Model.FirstName}" Placeholder="First Name"></Entry>
+      <Entry Text="{Binding Model.LastName}" Placeholder="Last Name" ></Entry>
+      <Entry Text="{Binding Model.Email}" Placeholder="Email" ></Entry>
+      <Entry Text="{Binding Model.PhoneNumber}" Placeholder="Phone" ></Entry>
+
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

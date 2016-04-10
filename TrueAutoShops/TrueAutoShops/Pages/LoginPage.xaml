@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrueAutoShops.Pages.LoginPage"
+              Icon="Icon-Small.png">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="20,20,20,20"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <StackLayout>
+      <Frame>
+        <Image Source="logo-small.png"></Image>
+      </Frame>
+      <Entry Text="{Binding Model.Email}" Placeholder="User Name"></Entry>
+      <Entry Text="{Binding Model.Password}" Placeholder="password" IsPassword="True"></Entry>
+      <StackLayout Orientation="Horizontal" Padding="0,0,0,15">
+        <StackLayout  Orientation="Horizontal" Padding="0,6,0,0" >
+          <Label VerticalOptions="Start" VerticalTextAlignment="Start" HorizontalTextAlignment="End"  Text="Remember User Name"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+          <Switch HorizontalOptions="EndAndExpand" IsToggled="{Binding Model.RememberMe}"></Switch>
+        </StackLayout>
+      </StackLayout>
+      <Button Text="Sign In" Command="{Binding SiginCommand}" ></Button>
+      <Button Text="Register" Command="{Binding RegisterCommand}" ></Button>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>
