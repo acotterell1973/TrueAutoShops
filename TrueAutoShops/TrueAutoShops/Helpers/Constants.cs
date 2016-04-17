@@ -1,9 +1,12 @@
 ﻿namespace TrueAutoShops.Helpers
 {
+
     internal static class Constants
     {
         public const string AppDefaultNavigationServiceName = "AppDefaultNavigationServiceName";
         public const string LoginNavigationService = "LoginNavigationService";
+        public const string CacheName = "trueautoshop";
+        public const int PolicyRetryCount = 3;
         /// <summary>
         /// 
         /// </summary>

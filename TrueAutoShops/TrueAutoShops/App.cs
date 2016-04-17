@@ -22,7 +22,7 @@ namespace TrueAutoShops
         {
             var masterDetailNavigationContainer = new ThemedMasterDetailNavigationContainer();
             masterDetailNavigationContainer.Init("Menu","slideout.png");
-            masterDetailNavigationContainer.AddPageWithIcon<SearchPageModel>("Home","slideout.png");
+           // masterDetailNavigationContainer.AddPageWithIcon<SearchPageModel>("Home","slideout.png");
             FreshIOC.Container.Register<IFreshNavigationService>(masterDetailNavigationContainer);
         }
 
@@ -40,6 +40,7 @@ namespace TrueAutoShops
         }
         private static void RegisterDependancies()
         {
+            Akavache.BlobCache.ApplicationName = Constants.CacheName;
             FreshIOC.Container.Register<IShopDataService, ShopDataService>();
             FreshIOC.Container.Register<ISecurityDataService, SecurityDataService>();
             FreshIOC.Container.Register(HttpClientConnector.Instance);

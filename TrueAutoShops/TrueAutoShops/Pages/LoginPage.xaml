@@ -24,8 +24,16 @@
           <Switch HorizontalOptions="EndAndExpand" IsToggled="{Binding Model.RememberMe}"></Switch>
         </StackLayout>
       </StackLayout>
-      <Button Text="Sign In" Command="{Binding SiginCommand}" ></Button>
+      <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand"  WidthRequest="100" Padding="57,0,0,0">
+        <Button Text="Sign In" Command="{Binding SiginCommand}"></Button>
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"  HorizontalOptions="End"  ><ActivityIndicator.Color>
+          <OnPlatform x:TypeArguments="Color">
+            <OnPlatform.iOS>#cccccc</OnPlatform.iOS>
+          </OnPlatform>
+        </ActivityIndicator.Color></ActivityIndicator>      </StackLayout>
+  
       <Button Text="Register" Command="{Binding RegisterCommand}" ></Button>
+     
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

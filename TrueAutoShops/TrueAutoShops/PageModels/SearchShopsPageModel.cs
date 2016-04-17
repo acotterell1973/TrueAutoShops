@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using PropertyChanged;
 using TrueAutoShops.Models;
 using TrueAutoShops.Services;
 using Xamarin.Forms;
 
 namespace TrueAutoShops.PageModels
 {
-    public class SearchPageModelx : BaseViewModel<List<ShopInfo>>
+   public class SearchShopsPageModel : BaseViewModel<List<ShopInfo>>
     {
         #region private members
         CancellationTokenSource _lastCancelSource;
@@ -24,7 +23,7 @@ namespace TrueAutoShops.PageModels
         #endregion
 
 
-        public SearchPageModelx(ISecurityDataService securityDataService, IShopDataService shopDataService)
+        public SearchShopsPageModel(ISecurityDataService securityDataService, IShopDataService shopDataService)
         {
             _securityDataService = securityDataService;
             _shopDataService = shopDataService;
@@ -51,6 +50,26 @@ namespace TrueAutoShops.PageModels
 
         #region Commands
 
+        public Command SearchCommand
+        {
+            get
+            {
+                return new Command(async (param) =>
+                {
+                    IsBusy = true;
+                    // Stop previous _search
+                    _lastCancelSource?.Cancel();
+
+                    // Perform the _search
+                    _lastCancelSource = new CancellationTokenSource();
+                    var token = _lastCancelSource.Token;
+                    int zipCode;
+                    int.TryParse(SearchText, out zipCode);
+                    Model = await _shopDataService.GetShopsByCityId(token, zipCode);
+                    IsBusy = false;
+                });
+            }
+        }
 
         #endregion
     }

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace TrueAutoShops
 {
-    public abstract class BaseViewModel<TM> : FreshMvvm.FreshBasePageModel where TM : BaseNotificationHandler
+    public abstract class BaseViewModel<TM> : FreshMvvm.FreshBasePageModel
     {
         protected BaseViewModel(){}
 

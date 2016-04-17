@@ -32,17 +32,19 @@ namespace TrueAutoShops.PageModels
             {
                 return new Command(async () =>
                 {
+                    IsBusy = true;
                     var token = await _securityDataService.LoginUser(Model);
                     if (token.AccessToken == string.Empty) return;
                     
                     var page = FreshPageModelResolver.ResolvePageModel<DashboardPageModel>();
                     
                     var tabbedNavigations = new FreshTabbedNavigationContainer();
-                    tabbedNavigations.AddTab<SearchPageModel>("Search", "Search-30.png");
+                    tabbedNavigations.AddTab<SearchShopsPageModel>("Search", "Search-30.png");
                     tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops", "");
                     tabbedNavigations.AddTab<ProfilePageModel>("Profile", "Gender-Neutral-User-30");
 
                     await CoreMethods.PushNewNavigationServiceModal(tabbedNavigations, new[] { page.GetModel() });
+                    IsBusy = false;
                 });
             }
         }

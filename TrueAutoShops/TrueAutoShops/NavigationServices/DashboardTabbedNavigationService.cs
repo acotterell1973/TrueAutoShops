@@ -85,28 +85,19 @@ namespace TrueAutoShops.NavigationServices
             Master = new NavigationPage(menuPage)
             {
                 Title = "TASs",
-             //   Icon = ImageSource.FromFile("icon.png") as FileImageSource,
+                //   Icon = ImageSource.FromFile("icon.png") as FileImageSource,
                 BackgroundColor = Color.FromHex("333333")
             };
-            
+
 
         }
 
         private void SetupTabbedPage()
         {
-            try
-            {
-                _tabbedNavigations = new FreshTabbedNavigationContainer();
-                _searchPage = _tabbedNavigations.AddTab<SearchPageModel>("Search", "");
-                _shopServiceHistoryPage = _tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops", "");
-                this.Detail = _tabbedNavigations;
-            }
-            catch (Exception exception)
-            {
-                
-                throw;
-            }
-        
+            _tabbedNavigations = new FreshTabbedNavigationContainer();
+            _searchPage = _tabbedNavigations.AddTab<SearchShopsPageModel>("Search", "");
+      //      _shopServiceHistoryPage = _tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops", "");
+            this.Detail = _tabbedNavigations;
         }
 
     }

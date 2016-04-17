@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="TrueAutoShops.Pages.SearchShopsPage"
+  Title="Search Shops">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="0,0,0,0"
+                Android="20, 20, 20, 20"
+                WinPhone="20, 20, 20, 20"></OnPlatform>
+  </ContentPage.Padding>
+  <ContentPage.Content>
+    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+
+   <controls:AutoCompleteView></controls:AutoCompleteView>
+
+      <SearchBar Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"  Placeholder="Search"></SearchBar>
+      <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"  HorizontalOptions="End"  >
+        <ActivityIndicator.Color>
+          <OnPlatform x:TypeArguments="Color">
+            <OnPlatform.iOS>#cccccc</OnPlatform.iOS>
+          </OnPlatform>
+        </ActivityIndicator.Color>
+      </ActivityIndicator>
+      <ScrollView>
+        <ScrollView.Content>
+          <ListView ItemsSource="{Binding Model}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <TextCell Text="{Binding ShopName}" TextColor="Black"
+                DetailColor="Gray">
+                </TextCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </ScrollView.Content>
+      </ScrollView>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>
