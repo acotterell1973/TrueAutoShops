@@ -94,15 +94,26 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.1.0.6529\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Insights, Version=1.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Insights.1.12.3\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="ResourcesModel\T4Templates\AppResources.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.tt</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="ResourcesModel\T4Templates\Images.ttinclude" />
+    <None Include="ResourcesModel\T4Templates\MultiFileOutput.ttinclude" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -120,6 +131,45 @@
       <Name>TrueAutoShops</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ResourcesModel\T4Templates\AppResources.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AppResources.cs</LastGenOutput>
+    </Content>
+    <AndroidResource Include="Resources\drawable\Images.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Images.txt</LastGenOutput>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_CalendarRequestService.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_Date From-50.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_facebook_login.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_Gender Neutral User-50.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_Menu-50.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_Search-50.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images_Settings-50.png">
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\Images.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.tt</DependentUpon>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -127,7 +177,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Insights.1.12.3\build\MonoAndroid10\Xamarin.Insights.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Insights.1.12.3\build\MonoAndroid10\Xamarin.Insights.targets'))" />
   </Target>
+  <Import Project="..\..\packages\Xamarin.Insights.1.12.3\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\..\packages\Xamarin.Insights.1.12.3\build\MonoAndroid10\Xamarin.Insights.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

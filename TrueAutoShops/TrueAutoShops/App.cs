@@ -1,4 +1,5 @@
 ﻿using FreshMvvm;
+using TrueAutoShops.Extensions;
 using TrueAutoShops.Helpers;
 using TrueAutoShops.NavigationServices;
 using TrueAutoShops.PageModels;
@@ -42,6 +43,7 @@ namespace TrueAutoShops
         {
             Akavache.BlobCache.ApplicationName = Constants.CacheName;
             FreshIOC.Container.Register<IShopDataService, ShopDataService>();
+            FreshIOC.Container.Register<IImageUrlTransformer, ImageUrlTransformer>();
             FreshIOC.Container.Register<ISecurityDataService, SecurityDataService>();
             FreshIOC.Container.Register(HttpClientConnector.Instance);
         }

@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TrueAutoShops.Models;
+using TrueAutoShops.Models.Response;
+using Xamarin;
 
 namespace TrueAutoShops.Services
 {
@@ -54,28 +57,52 @@ namespace TrueAutoShops.Services
 
         }
 
-        public async Task<TokenResponseModel> LoginUser(Login login)
+        public async Task<TokenResponseModel> LoginUser(CancellationToken cancellationToken,Login login)
         {
-            var loginDictionary = (from x in login.GetType().GetRuntimeProperties() select x)
+            var postDictionary = (from x in login.GetType().GetRuntimeProperties() select x)
                 .ToDictionary(x => x.Name, 
-                x => (x.GetMethod.Invoke(login, null) == null ? "" : x.GetMethod.Invoke(login, null).ToString()));
-            var content = new FormUrlEncodedContent(loginDictionary);
+                x => x.GetMethod.Invoke(login, null) == null ? "" : x.GetMethod.Invoke(login, null).ToString());
+            var content = new FormUrlEncodedContent(postDictionary);
 
+            using (var handle = Insights.TrackTime("RegisterUser", postDictionary))
+            {
+                var response =
+                    await _client.PostAsync("/api/audience/authenticate?returnUrl=test", content, cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
 
-            var response = await _client.PostAsync("/api/audience/authenticate?returnUrl=test", content);
-            if (!response.IsSuccessStatusCode) { return null; }
+                var jsonMessage = await response.Content.ReadAsStringAsync();
 
-            var jsonMessage = await response.Content.ReadAsStringAsync();
-            
-            var tokenResponse = JsonConvert.DeserializeObject<TokenResponseModel>(jsonMessage);
+                var tokenResponse = JsonConvert.DeserializeObject<TokenResponseModel>(jsonMessage);
 
-            return tokenResponse;
+                return tokenResponse;
+            }
 
         }
 
-        public Task<string> RegisterUser(UserProfile user)
+        public async Task<CreateProfileResponse> RegisterUser(CancellationToken cancellationToken, UserProfile user)
         {
-            throw new NotImplementedException();
+            var postDictionary = (from x in user.GetType().GetRuntimeProperties() select x)
+                   .ToDictionary(x => x.Name,
+                   x => x.GetMethod.Invoke(user, null) == null ? "" : x.GetMethod.Invoke(user, null).ToString());
+            var content = new FormUrlEncodedContent(postDictionary);
+
+            using (var handle = Insights.TrackTime("RegisterUser", postDictionary))
+            {
+                var response = await _client.PostAsync("/api/audience/createprofile", content, cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                var jsonMessage = await response.Content.ReadAsStringAsync();
+
+                var tokenResponse = JsonConvert.DeserializeObject<CreateProfileResponse>(jsonMessage);
+
+                return tokenResponse;
+            }
         }
 
         public void Dispose()

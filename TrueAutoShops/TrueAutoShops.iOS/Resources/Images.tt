@@ -1,0 +1,7 @@
+﻿<#@ include file="..\ResourcesModel\T4Templates\Images.ttinclude" #>
+<#@ output extension=".txt" #>
+<#@ template language="C#" hostSpecific="true" #><#
+
+Process("TrueAutoShops", "BundleResource");
+
+#>

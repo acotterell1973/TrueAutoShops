@@ -3,6 +3,7 @@
 
     internal static class Constants
     {
+        public const string ApiEndpoint = "http://asapservices.cloudapp.net:8080";
         public const string AppDefaultNavigationServiceName = "AppDefaultNavigationServiceName";
         public const string LoginNavigationService = "LoginNavigationService";
         public const string CacheName = "trueautoshop";

@@ -1,6 +1,8 @@
-﻿using FreshMvvm;
+﻿using System.Threading;
+using FreshMvvm;
 using PropertyChanged;
 using TrueAutoShops.Models;
+using TrueAutoShops.NavigationServices;
 using TrueAutoShops.Services;
 using Xamarin.Forms;
 
@@ -9,6 +11,7 @@ namespace TrueAutoShops.PageModels
     [ImplementPropertyChanged]
     public class LoginPageModel : BaseViewModel<Login>
     {
+        CancellationTokenSource _lastCancelSource;
         private readonly ISecurityDataService _securityDataService;
         //   private readonly IUserDialogs _userDialogs;
 
@@ -33,15 +36,16 @@ namespace TrueAutoShops.PageModels
                 return new Command(async () =>
                 {
                     IsBusy = true;
-                    var token = await _securityDataService.LoginUser(Model);
+                    _lastCancelSource?.Cancel();
+
+                    // Perform the _search
+                    _lastCancelSource = new CancellationTokenSource();
+                    var cancellationToken = _lastCancelSource.Token;
+                    var token = await _securityDataService.LoginUser(cancellationToken, Model);
                     if (token.AccessToken == string.Empty) return;
-                    
+
                     var page = FreshPageModelResolver.ResolvePageModel<DashboardPageModel>();
-                    
-                    var tabbedNavigations = new FreshTabbedNavigationContainer();
-                    tabbedNavigations.AddTab<SearchShopsPageModel>("Search", "Search-30.png");
-                    tabbedNavigations.AddTab<ServiceShopHistoryPageModel>("Previous Shops", "");
-                    tabbedNavigations.AddTab<ProfilePageModel>("Profile", "Gender-Neutral-User-30");
+                    var tabbedNavigations = DashboardNavigation.CreateNavigation();
 
                     await CoreMethods.PushNewNavigationServiceModal(tabbedNavigations, new[] { page.GetModel() });
                     IsBusy = false;

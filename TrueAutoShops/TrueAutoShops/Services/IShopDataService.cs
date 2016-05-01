@@ -9,5 +9,7 @@ namespace TrueAutoShops.Services
     {
         Task<List<ShopInfo>> GetListofShopsByCityName(string cityName);
         Task<List<ShopInfo>> GetShopsByCityId(CancellationToken cancellationToken, int zipcityid = 0);
+
+        Task<List<ShopsSearch>> GetShopsByCityName(CancellationToken cancellationToken, string cityName);
     }
 }

@@ -1,22 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TrueAutoShops.Pages.RegisterPage">
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             xmlns:extensions="clr-namespace:TrueAutoShops.Extensions;assembly=TrueAutoShops"
+             x:Class="TrueAutoShops.Pages.RegisterPage"
+              >
   <ContentPage.Padding>
     <OnPlatform x:TypeArguments="Thickness"
-                iOS="20,20,20,20"
+                iOS="20,10,20,20"
                 Android="20, 20, 20, 20"
                 WinPhone="20, 20, 20, 20"></OnPlatform>
   </ContentPage.Padding>
   <ContentPage.Content>
     <StackLayout>
-      <Frame>
+      <Frame BackgroundColor="Transparent">
         <Image Source="logo-small.png"></Image>
       </Frame>
-      <Entry Placeholder="Email Address or User"></Entry>
-      <Entry Placeholder="password" IsPassword="True"></Entry>
-      <Entry Placeholder="Confirm password" IsPassword="True"></Entry>
-      <Button BorderRadius="0" Text="Register"></Button>
+  
+      <controls:ImageButton Text="Login with Facebook"
+                            BackgroundColor="#01abdf"
+                            TextColor="#ffffff"
+                            HeightRequest="37"
+                            WidthRequest="716"
+                            Source="{extensions:ImageResource /Images/facebook_login.png}"
+                         
+                            ImageHeightRequest="57"
+                            ImageWidthRequest="716" />
+      <StackLayout Padding="0,15,0,15">
+        <BoxView Color="Gray" HeightRequest="1" Opacity=".5"></BoxView>
+      </StackLayout>
+      
+      <Entry Placeholder="First Name" Text="{Binding Model.FirstName}"></Entry>
+      <Entry Placeholder="Last Name" Text="{Binding Model.LastName}"></Entry>
+      <Entry Placeholder="Email Address" Text="{Binding Model.Email}"></Entry>
+      <Entry Placeholder="Password" IsPassword="True" Text="{Binding Model.Password}"></Entry>
+
+      <controls:ImageButton Text="Get Started"
+                            Command="{Binding RegisterUserCommand}"
+                            BackgroundColor="#01abdf"
+                            TextColor="#ffffff"
+                            HeightRequest="37"
+                            WidthRequest="716"/>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

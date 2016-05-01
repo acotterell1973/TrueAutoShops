@@ -1,0 +1,226 @@
+﻿<#@ output extension=".txt" #>
+<#@ template language="C#" hostSpecific="true" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml.XPath" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ assembly name="EnvDTE80" #>
+<#@ include file="MultiFileOutput.ttinclude" #>
+<!-- 
+Licensed under the Revised BSD License 
+Author: Daniel Vaughan
+
+Copyright (c) 2015, Outcoder
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<#+
+
+public void Process(string projectName, string buildAction)
+{
+    DeleteOldOutputs();
+    var sb = new StringBuilder();
+    this.GenerationEnvironment = sb;
+
+    /* Retrieve the DTE. */
+    IServiceProvider hostServiceProvider = (IServiceProvider)Host;
+    EnvDTE.DTE dte = (EnvDTE.DTE)hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+
+    EnvDTE.Project project = null;
+
+    var solution = dte.Solution;
+    var items = GetProjects();
+
+    foreach (EnvDTE.Project item in items)
+    {    
+        if (item.Name.EndsWith(projectName))
+        {
+            project = item;
+            break;
+        }        
+    }
+    
+    if (project == null)
+    {
+        throw new Exception("Unknown project " + projectName);
+    }
+        
+    string projectDirectory = Path.GetDirectoryName(project.FullName);
+    int projectDirectoryLength = projectDirectory.Length;
+
+    var fileExtensions = new string[] { ".png", ".jpg" };
+
+    var fileList = new List<string>();
+    var projectItems = project.ProjectItems;
+    if (projectItems != null)
+    {
+        foreach (ProjectItem projectItem in project.ProjectItems)
+        {
+            foreach (string extension in fileExtensions)
+            {
+                GetFiles(projectItem, extension, fileList);
+            }
+        }
+    }
+
+    string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+        
+    /* Copy each file to the output using a name 
+     * that represents the flattened directory structure. */
+    foreach (string item in fileList)
+    {
+        if (!item.StartsWith(projectDirectory))
+        {
+            continue;
+        }
+
+        string fileNameInProject = Path.GetFileName(item);
+        string fileDirectory = Path.GetDirectoryName(item);
+        string pathSubstring = fileDirectory.Substring(projectDirectoryLength);
+        if (pathSubstring.StartsWith("\\"))
+        {
+            pathSubstring = pathSubstring.Substring(1);
+        }
+
+        string flattenedPathSubstring = pathSubstring.Replace("\\","_");
+        if (flattenedPathSubstring.Length > 0)
+        {
+            flattenedPathSubstring = flattenedPathSubstring + "_";
+        }
+
+        string flattenedFileName = flattenedPathSubstring + fileNameInProject;
+        string newOutputPath = Path.Combine(templateDirectory, flattenedFileName);
+
+        if (File.Exists(newOutputPath))
+        {
+            var projectFileInfo = new System.IO.FileInfo(item);
+            var newFileInfo = new System.IO.FileInfo(newOutputPath);
+
+            if (projectFileInfo.LastWriteTimeUtc < newFileInfo.LastWriteTimeUtc)
+            {
+                continue;
+            }
+        }
+
+        File.Copy(item, newOutputPath, true);
+        AddProjectItem(flattenedFileName, buildAction);
+    }    
+}
+
+void GetFiles(ProjectItem projectItem, string fileExtension, IList<string> fileList)
+{
+    string fullPath = projectItem.Properties.Item("FullPath").Value.ToString();
+
+    if (fullPath.ToLower().EndsWith(fileExtension))
+    {
+        fileList.Add(fullPath);
+    }
+
+    var childItems = projectItem.ProjectItems;
+    if (childItems != null)
+    {
+        foreach (ProjectItem childItem in childItems)
+        {
+            GetFiles(childItem, fileExtension, fileList);    
+        }
+    }
+}
+
+public class VSProjectType
+{
+    public const string SolutionFolder = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
+    public const string VisualBasic = "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}";
+    public const string VisualCSharp = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
+    public const string VisualCPlusPlus = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+    public const string VisualJSharp = "{E6FDF86B-F3D1-11D4-8576-0002A516ECE8}";
+    public const string WebProject = "{E24C65DC-7377-472b-9ABA-BC803B73C61A}";
+    public const string SharedProject = "{41cd7a00-7ddb-448f-a59d-d394a2fcc7dc}";
+}
+
+public IEnumerable<EnvDTE.Project> GetProjects()
+{
+    IServiceProvider hostServiceProvider = (IServiceProvider)Host;
+    EnvDTE.DTE dte = (EnvDTE.DTE)hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+
+    var result = new List<EnvDTE.Project>();
+
+    /* Retrieve all projects that are at top level of the solution
+     * and recursively search Project folders */
+    var topLevelProjects = dte.Solution.Projects;
+
+    foreach(EnvDTE.Project project in topLevelProjects)
+    {
+        if (project.Kind == VSProjectType.SolutionFolder)
+        {
+            result.AddRange(GetProjectsFromItemsCollection(project.ProjectItems));
+        }
+        else
+        {
+            result.Add(project);
+        }
+    }
+
+    return result;
+}
+
+List<EnvDTE.Project> GetProjectsFromItemsCollection(EnvDTE.ProjectItems items)
+{
+    var result = new List<EnvDTE.Project>();
+
+    foreach (EnvDTE.ProjectItem item in items)
+    {
+        if (item.SubProject == null)
+        {
+            continue;
+        }
+        
+        if (item.SubProject.Kind == VSProjectType.SolutionFolder)
+        {
+            result.AddRange(GetProjectsFromItemsCollection(item.SubProject.ProjectItems));
+        }
+        else if (item.SubProject.Kind == VSProjectType.VisualBasic
+                    || item.SubProject.Kind == VSProjectType.VisualCPlusPlus
+                    || item.SubProject.Kind == VSProjectType.VisualCSharp
+                    || item.SubProject.Kind == VSProjectType.VisualJSharp
+                    || item.SubProject.Kind == VSProjectType.WebProject
+                    || item.SubProject.Kind == VSProjectType.SharedProject)
+        {
+            result.Add(item.SubProject);
+        }
+    }
+
+    return result;
+}
+#>

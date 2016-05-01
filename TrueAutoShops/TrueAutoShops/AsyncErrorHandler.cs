@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Xamarin;
 
 namespace TrueAutoShops
 {
@@ -7,7 +8,7 @@ namespace TrueAutoShops
     {
         public static void HandleException(Exception exception)
         {
-         //   Debug.WriteLine(exception);
+            Insights.Report(exception);
         }
     }
 }

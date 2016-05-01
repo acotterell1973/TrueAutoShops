@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Xamarin;
 
 namespace TrueAutoShops.iOS
 {
@@ -23,6 +24,14 @@ namespace TrueAutoShops.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
+            {
+                if (isStartupCrash)
+                {
+                    Insights.PurgePendingCrashReports().Wait();
+                }
+            };
+            Insights.Initialize("54438324c5a009a3647a530de408bd26905780b7");
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

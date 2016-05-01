@@ -39,7 +39,7 @@ namespace TrueAutoShops.Helpers
                 MaxResponseContentBufferSize = 256000
             };
 
-
+            
             client.DefaultRequestHeaders.Accept.Clear();
             //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authHeaderValue);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.MediaTypeNames.ApplicationJson));

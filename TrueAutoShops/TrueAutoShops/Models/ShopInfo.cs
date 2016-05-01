@@ -4,11 +4,6 @@ using PropertyChanged;
 
 namespace TrueAutoShops.Models
 {
-    public class ShopInfoResponse
-    {
-        public List<ShopInfo> Response { get; set; }
-    
-    }
     public class ShopInfo  : BaseNotificationHandler
     {
         public ShopInfo()
@@ -32,4 +27,6 @@ namespace TrueAutoShops.Models
         public List<ShopAmenities> Amenities { get; set; }
         public List<ShopHours> Hours { get; set; }
     }
+
+    
 }

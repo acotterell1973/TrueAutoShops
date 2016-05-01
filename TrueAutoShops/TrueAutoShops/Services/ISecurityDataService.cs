@@ -1,13 +1,15 @@
+using System.Threading;
 using System.Threading.Tasks;
 using TrueAutoShops.Models;
+using TrueAutoShops.Models.Response;
 
 namespace TrueAutoShops.Services
 {
     public interface ISecurityDataService
     {
         Task<TokenResponseModel> GetTokenTask();
-        Task<TokenResponseModel> LoginUser(Login login);
+        Task<TokenResponseModel> LoginUser(CancellationToken cancellationToken, Login login);
 
-        Task<string> RegisterUser(UserProfile user);
+        Task<CreateProfileResponse> RegisterUser(CancellationToken cancellationToken, UserProfile user);
     }
 }
